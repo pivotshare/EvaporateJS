@@ -685,14 +685,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
               if (xhr.readyState == 4){
 
-                 if (xhr.status == 200 && xhr.response.length == 28){
+                var response = xhr.response && xhr.response.trim(); // Remove possible whitespace from an API
 
-                    l.d('authorizedSend got signature for step: \'' + authRequester.step + '\'    sig: '+ xhr.response);
-                    authRequester.auth = xhr.response;
+                 if (xhr.status == 200 && response.length == 28){
+
+                    l.d('authorizedSend got signature for step: \'' + authRequester.step + '\'    sig: '+ response);
+                    authRequester.auth = response;
                     authRequester.onGotAuth();
 
                  } else {
-                    warnMsg = 'failed to get authorization (readyState=4) for ' + authRequester.step + '.  xhr.status: ' + xhr.status + '.  xhr.response: ' + xhr.response;
+                    warnMsg = 'failed to get authorization (readyState=4) for ' + authRequester.step + '.  xhr.status: ' + xhr.status + '.  xhr.response: ' + response;
                     l.w(warnMsg);
                     me.warn(warnMsg);
                     authRequester.onFailedAuth(xhr);
